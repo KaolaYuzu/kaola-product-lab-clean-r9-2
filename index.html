@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaola Product Lab</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: #020810; }
+  </style>
+</head>
+<body>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var view = params.get('view');
+      var dest;
+      if (view === 'mobile') {
+        dest = 'mobile.html';
+      } else if (view === 'desktop') {
+        dest = 'desktop.html';
+      } else {
+        dest = window.innerWidth <= 768 ? 'mobile.html' : 'desktop.html';
+      }
+      // Preserve any other query params (except 'view') when redirecting
+      params.delete('view');
+      var qs = params.toString();
+      window.location.replace(dest + (qs ? '?' + qs : ''));
+    })();
+  </script>
+</body>
+</html>
