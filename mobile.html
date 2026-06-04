@@ -4644,33 +4644,36 @@ document.addEventListener('keydown', function(e){
     <h2 class="mc-title" data-i18n="cfTitle">Contact / Feedback</h2>
     <p class="mc-subtitle" data-i18n="cfSubtitle">Get in touch</p>
     <div class="mc-divider"></div>
-    <p class="mc-placeholder-note" data-i18n="cfPlaceholder">Contact form will be connected before public release.</p>
 
-    <!-- Mobile preview card only: non-focusable rows prevent iOS keyboard / AutoFill from opening. -->
+    <!-- Mobile contact form: real inputs for user interaction -->
     <div class="mc-field">
       <div class="mc-label" data-i18n="cfName">Name</div>
-      <div class="mc-display-field">Your name</div>
+      <input class="mc-input" id="mc-name" type="text" placeholder="Your name" autocomplete="name">
     </div>
     <div class="mc-field">
       <div class="mc-label">Email</div>
-      <div class="mc-display-field">your@email.com</div>
+      <input class="mc-input" id="mc-email" type="email" placeholder="your@email.com" autocomplete="email">
     </div>
     <div class="mc-field">
       <div class="mc-label" data-i18n="cfTopic">Topic</div>
-      <div class="mc-display-field">What's this about?</div>
+      <input class="mc-input" id="mc-topic" type="text" placeholder="What\'s this about?">
     </div>
     <div class="mc-field">
       <div class="mc-label" data-i18n="cfMsgType">Message Type</div>
-      <div class="mc-display-field">Collaboration Inquiry</div>
+      <select class="mc-select" id="mc-msgtype">
+        <option value="" disabled selected data-i18n="cfMsgType">Message Type</option>
+        <option value="collaboration" data-i18n="cfOpt1">Collaboration Inquiry</option>
+        <option value="feedback" data-i18n="cfOpt2">Product Feedback</option>
+        <option value="personal" data-i18n="cfOpt3">Personal Note</option>
+      </select>
     </div>
     <div class="mc-field">
       <div class="mc-label" data-i18n="cfMessage">Message</div>
-      <div class="mc-display-field mc-display-textarea">Your message...</div>
+      <textarea class="mc-textarea" id="mc-message" placeholder="Your message..."></textarea>
     </div>
     <button type="button" class="mc-btn-send" onclick="document.getElementById('mc-notice').style.display='block'" data-i18n="cfSubmit">Send Message</button>
     <div id="mc-notice" class="mc-notice" style="display:none">
-      Thank you — form will be connected before public release.
-    </div>
+      </div>
   </div>
 </div>
 <!-- ═══ R8: MOBILE MODAL OVERLAY — z-9999 bottom sheet (About Creator) ═══ -->
