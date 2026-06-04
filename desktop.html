@@ -1928,7 +1928,7 @@ var i18n = {
     crCollabTitle:'Collaboration & Conversation',
     crCollabBody:'If you have an idea you want to turn into a website, a web tool, or a portfolio page, or if there is a workflow that feels stuck and you are wondering whether AI or web tools could help, feel free to reach out.<br><br>I am currently learning what creators, small brands, and freelancers actually struggle with when organizing content, presenting work, building websites, creating workflow tools, or applying AI in practical ways.<br><br>If the direction feels right, we can start with a small website, a template, an interactive tool, or a workflow prototype. If it is still unclear, we can first clarify the problem together.',
     cfTitle:'Contact / Feedback',cfSubtitle:'Get in touch',
-    cfPlaceholder:'Contact form will be connected before public release.',
+    cfPlaceholder:'',
     cfName:'Name',cfTopic:'Topic',cfMsgType:'Message Type',
     cfOpt1:'Collaboration Inquiry',cfOpt2:'Product Feedback',cfOpt3:'Personal Note',
     cfMessage:'Message',cfSubmit:'Send Message',
@@ -2593,23 +2593,22 @@ window.addEventListener('scroll', function() {
     <div class="modal-divider"></div>
 
     <!-- Tally embed placeholder — to be connected before public release -->
-    <div class="cf-placeholder" data-i18n="cfPlaceholder">Contact form will be connected before public release.</div>
 
     <div class="cf-field">
       <label class="cf-label" data-i18n="cfName">Name / 聯絡人稱呼</label>
-      <input class="cf-input" type="text" placeholder="Your name">
+      <input class="cf-input" id="cf-name" type="text" placeholder="Your name">
     </div>
     <div class="cf-field">
       <label class="cf-label">Email</label>
-      <input class="cf-input" type="email" placeholder="your@email.com">
+      <input class="cf-input" id="cf-email" type="email" placeholder="your@email.com">
     </div>
     <div class="cf-field">
       <label class="cf-label" data-i18n="cfTopic">Topic / 主題</label>
-      <input class="cf-input" type="text" placeholder="What's this about?">
+      <input class="cf-input" id="cf-topic" type="text" placeholder="What's this about?">
     </div>
     <div class="cf-field">
       <label class="cf-label" data-i18n="cfMsgType">Message Type</label>
-      <select class="cf-select">
+      <select class="cf-select" id="cf-msgtype">
         <option data-i18n="cfOpt1">Collaboration Inquiry</option>
         <option data-i18n="cfOpt2">Product Feedback</option>
         <option data-i18n="cfOpt3">Personal Note</option>
@@ -2617,10 +2616,10 @@ window.addEventListener('scroll', function() {
     </div>
     <div class="cf-field">
       <label class="cf-label" data-i18n="cfMessage">Message / 內容</label>
-      <textarea class="cf-textarea" placeholder="Your message..."></textarea>
+      <textarea class="cf-textarea" id="cf-message" placeholder="Your message..."></textarea>
     </div>
-    <button class="cf-submit" onclick="document.getElementById('cf-notice').style.display='block'" data-i18n="cfSubmit">Send Message</button>
-    <div id="cf-notice" style="display:none;margin-top:10px;font-size:13px;color:rgba(0,210,255,.70);text-align:center;padding:10px;border:1px dashed rgba(0,210,255,.25);border-radius:8px;">Contact form will be connected before public release.</div>
+    <button class="cf-submit" onclick="submitDesktopContact(event)" data-i18n="cfSubmit">Send Message</button>
+    <div id="cf-notice" style="display:none;margin-top:10px;font-size:13px;color:rgba(0,210,255,.70);text-align:center;padding:10px;border:1px dashed rgba(0,210,255,.25);border-radius:8px;"></div>
   </div>
 </div>
 
@@ -3436,5 +3435,51 @@ window.addEventListener('scroll', function() {
   </div><!-- /case-notes-05 -->
 </div><!-- /questDrawer05 -->
 
+
+<!-- ═══ R9.3: Formspree Integration ═══ -->
+<script>
+(function(){
+  var EP='https://formspree.io/f/mjgdbela';
+  function showMsg(el,msg,ok){
+    el.innerHTML=msg;
+    el.style.display='block';
+    el.style.color=ok?'rgba(0,210,255,.80)':'rgba(255,100,100,.85)';
+    el.style.borderColor=ok?'rgba(0,210,255,.25)':'rgba(255,100,100,.25)';
+  }
+  function doPost(data,noticeId,clearIds){
+    fetch(EP,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+    .then(function(res){
+      var el=document.getElementById(noticeId);
+      if(res.ok){
+        showMsg(el,'✓ Message sent! Thank you for reaching out.',true);
+        clearIds.forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+      } else {
+        showMsg(el,'Something went wrong. Please try again.',false);
+      }
+    })
+    .catch(function(){
+      var el=document.getElementById(noticeId);
+      showMsg(el,'Network error. Please check your connection and try again.',false);
+    });
+  }
+  window.submitDesktopContact=function(e){
+    e.preventDefault();
+    var n=document.getElementById('cf-notice');
+    var email=(document.getElementById('cf-email')||{}).value||'';
+    var msg=(document.getElementById('cf-message')||{}).value||'';
+    if(!email){showMsg(n,'Please enter your email address.',false);return;}
+    if(!msg){showMsg(n,'Please enter a message.',false);return;}
+    showMsg(n,'Sending…',true);
+    doPost({
+      name:(document.getElementById('cf-name')||{}).value||'',
+      email:email,
+      topic:(document.getElementById('cf-topic')||{}).value||'',
+      message_type:(document.getElementById('cf-msgtype')||{}).value||'',
+      message:msg
+    },'cf-notice',['cf-name','cf-email','cf-topic','cf-msgtype','cf-message']);
+  };
+})();
+</script>
 </body>
 </html>

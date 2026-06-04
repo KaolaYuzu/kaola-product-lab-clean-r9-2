@@ -4671,9 +4671,8 @@ document.addEventListener('keydown', function(e){
       <div class="mc-label" data-i18n="cfMessage">Message</div>
       <textarea class="mc-textarea" id="mc-message" placeholder="Your message..."></textarea>
     </div>
-    <button type="button" class="mc-btn-send" onclick="document.getElementById('mc-notice').style.display='block'" data-i18n="cfSubmit">Send Message</button>
-    <div id="mc-notice" class="mc-notice" style="display:none">
-      </div>
+    <button type="button" class="mc-btn-send" onclick="submitMobileContact(event)" data-i18n="cfSubmit">Send Message</button>
+    <div id="mc-notice" class="mc-notice" style="display:none"></div>
   </div>
 </div>
 <!-- ═══ R8: MOBILE MODAL OVERLAY — z-9999 bottom sheet (About Creator) ═══ -->
@@ -4716,5 +4715,50 @@ document.addEventListener('keydown', function(e){
 
   </div>
 </div>
+
+<!-- ═══ R9.3: Formspree Integration ═══ -->
+<script>
+(function(){
+  var EP='https://formspree.io/f/mjgdbela';
+  function showMsg(el,msg,ok){
+    el.innerHTML=msg;
+    el.style.display='block';
+    el.style.color=ok?'rgba(0,210,255,.80)':'rgba(255,100,100,.85)';
+  }
+  function doPost(data,noticeId,clearIds){
+    fetch(EP,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(data)})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};});})
+    .then(function(res){
+      var el=document.getElementById(noticeId);
+      if(res.ok){
+        showMsg(el,'✓ Message sent! Thank you for reaching out.',true);
+        clearIds.forEach(function(id){var e=document.getElementById(id);if(e)e.value='';});
+      } else {
+        showMsg(el,'Something went wrong. Please try again.',false);
+      }
+    })
+    .catch(function(){
+      var el=document.getElementById(noticeId);
+      showMsg(el,'Network error. Please check your connection and try again.',false);
+    });
+  }
+  window.submitMobileContact=function(e){
+    e.preventDefault();
+    var n=document.getElementById('mc-notice');
+    var email=(document.getElementById('mc-email')||{}).value||'';
+    var msg=(document.getElementById('mc-message')||{}).value||'';
+    if(!email){showMsg(n,'Please enter your email address.',false);return;}
+    if(!msg){showMsg(n,'Please enter a message.',false);return;}
+    showMsg(n,'Sending…',true);
+    doPost({
+      name:(document.getElementById('mc-name')||{}).value||'',
+      email:email,
+      topic:(document.getElementById('mc-topic')||{}).value||'',
+      message_type:(document.getElementById('mc-msgtype')||{}).value||'',
+      message:msg
+    },'mc-notice',['mc-name','mc-email','mc-topic','mc-msgtype','mc-message']);
+  };
+})();
+</script>
 </body>
 </html>
