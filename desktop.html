@@ -1929,7 +1929,7 @@ var i18n = {
     crCollabBody:'If you have an idea you want to turn into a website, a web tool, or a portfolio page, or if there is a workflow that feels stuck and you are wondering whether AI or web tools could help, feel free to reach out.<br><br>I am currently learning what creators, small brands, and freelancers actually struggle with when organizing content, presenting work, building websites, creating workflow tools, or applying AI in practical ways.<br><br>If the direction feels right, we can start with a small website, a template, an interactive tool, or a workflow prototype. If it is still unclear, we can first clarify the problem together.',
     cfTitle:'Contact / Feedback',cfSubtitle:'Get in touch',
     cfPlaceholder:'',
-    cfName:'Name',cfTopic:'Topic',cfMsgType:'Message Type',
+    cfName:'Name',cfTopic:'',cfMsgType:'Message Type',
     cfOpt1:'Collaboration Inquiry',cfOpt2:'Product Feedback',cfOpt3:'Personal Note',
     cfMessage:'Message',cfSubmit:'Send Message',
     pgTitle:'All Projects',pgSubtitle:'Kaola Product Lab',
@@ -2086,7 +2086,7 @@ var i18n = {
     crCollabBody:'如果你有一個想法想變成網站、Web tool、作品集頁，或有一個工作流程卡住，想知道能不能用 AI 或網頁工具解決，歡迎來聊聊。\n\n我目前正在了解創作者、小型品牌與自由工作者在內容整理、作品展示、網頁製作、流程工具與 AI 應用上的真實需求。\n\n如果方向適合，可以從一個小型網頁、模板、互動工具或流程原型開始；如果還不確定，也可以先一起釐清問題。',
     cfTitle:'聯絡 / 回饋',cfSubtitle:'與我聯繫',
     cfPlaceholder:'聯絡表單將於公開發布前接上。',
-    cfName:'聯絡人稱呼',cfTopic:'主題',cfMsgType:'訊息類型',
+    cfName:'聯絡人稱呼',cfTopic:'',cfMsgType:'訊息類型',
     cfOpt1:'合作詢問',cfOpt2:'產品回饋',cfOpt3:'個人留言',
     cfMessage:'內容',cfSubmit:'送出訊息',
     pgTitle:'所有作品',pgSubtitle:'Kaola Product Lab',
@@ -2601,10 +2601,6 @@ window.addEventListener('scroll', function() {
     <div class="cf-field">
       <label class="cf-label">Email</label>
       <input class="cf-input" id="cf-email" type="email" placeholder="your@email.com">
-    </div>
-    <div class="cf-field">
-      <label class="cf-label" data-i18n="cfTopic">Topic / 主題</label>
-      <input class="cf-input" id="cf-topic" type="text" placeholder="What's this about?">
     </div>
     <div class="cf-field">
       <label class="cf-label" data-i18n="cfMsgType">Message Type</label>
@@ -3474,10 +3470,9 @@ window.addEventListener('scroll', function() {
     doPost({
       name:(document.getElementById('cf-name')||{}).value||'',
       email:email,
-      topic:(document.getElementById('cf-topic')||{}).value||'',
       message_type:(document.getElementById('cf-msgtype')||{}).value||'',
       message:msg
-    },'cf-notice',['cf-name','cf-email','cf-topic','cf-msgtype','cf-message']);
+    },'cf-notice',['cf-name','cf-email','cf-msgtype','cf-message']);
   };
 })();
 </script>
